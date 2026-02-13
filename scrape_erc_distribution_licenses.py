@@ -334,6 +334,14 @@ class ERCLicenseScraper:
                         user['ปริมาณจำหน่ายไฟฟ้า_kWh_ปี'] = self.clean_text(cells[7].get_text()) if len(cells) > 7 else None
                         user['อัตราค่าบริการไฟฟ้า'] = self.clean_text(cells[8].get_text()) if len(cells) > 8 else None
                         user['SCOD'] = self.clean_text(cells[9].get_text()) if len(cells) > 9 else None
+
+                        # Skip detail/continuation rows - they have numbers in the name field
+                        contract_num = user.get('ชื่อ_เลขที่สัญญา', '')
+                        if contract_num:
+                            import re
+                            if re.match(r'^\d+\.\d+(\s+[\d,]+\.\d+)?$', contract_num):
+                                continue  # Skip detail row
+
                         if user.get('ชื่อ_เลขที่สัญญา') or user.get('ชื่อคู่สัญญาผู้ใช้ไฟฟ้า'):
                             electricity_users.append(user)
 

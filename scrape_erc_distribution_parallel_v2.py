@@ -310,6 +310,8 @@ class ERCLicenseScraper:
                     cells = row.find_all('td')
                     if 'ไม่มีข้อมูล' in row.get_text(strip=True) or len(cells) < 5:
                         continue
+
+                    # Extract tentative user data
                     user = {
                         'ชื่อ_เลขที่สัญญา': self.clean_text(cells[1].get_text()) if len(cells) > 1 else None,
                         'ชื่อคู่สัญญาผู้ใช้ไฟฟ้า': self.clean_text(cells[2].get_text()) if len(cells) > 2 else None,
@@ -321,6 +323,17 @@ class ERCLicenseScraper:
                         'อัตราค่าบริการไฟฟ้า': self.clean_text(cells[8].get_text()) if len(cells) > 8 else None,
                         'SCOD': self.clean_text(cells[9].get_text()) if len(cells) > 9 else None
                     }
+
+                    # Skip detail/continuation rows - they have numbers in the name field
+                    # Valid contract numbers should contain letters or Thai characters, not just numbers with decimals
+                    contract_num = user.get('ชื่อ_เลขที่สัญญา', '')
+                    if contract_num:
+                        # If contract number looks like "3.900 3,900.00" or just "33.280", it's a detail row
+                        import re
+                        if re.match(r'^\d+\.\d+(\s+[\d,]+\.\d+)?$', contract_num):
+                            continue  # Skip this row - it's a detail row
+
+                    # Only add if has actual user data
                     if user.get('ชื่อ_เลขที่สัญญา') or user.get('ชื่อคู่สัญญาผู้ใช้ไฟฟ้า'):
                         users.append(user)
         return users
