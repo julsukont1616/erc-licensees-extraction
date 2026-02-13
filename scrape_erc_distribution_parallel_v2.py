@@ -665,9 +665,9 @@ def save_data_to_files(all_data, filename_prefix):
 
     df.to_csv(csv_file, index=False, encoding='utf-8-sig')
 
-    print(f"✓ Excel: {excel_file}")
-    print(f"✓ CSV: {csv_file}")
-    print(f"  Records: {len(df)}, Columns: {len(df.columns)}")
+    print(f"[OK] Excel: {excel_file}")
+    print(f"[OK] CSV: {csv_file}")
+    print(f"     Records: {len(df)}, Columns: {len(df.columns)}")
 
 
 def main():
@@ -740,9 +740,9 @@ def main():
 
     if all_data:
         save_data_to_files(all_data, "ERC_DISTRIBUTION_PARALLEL_V2")
-        print("\n✓ SUCCESS!")
+        print("\n[SUCCESS] All data saved successfully!")
     else:
-        print("\n⚠ WARNING: No data extracted!")
+        print("\n[WARNING] No data extracted!")
 
 
 if __name__ == "__main__":
