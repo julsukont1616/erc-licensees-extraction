@@ -22,25 +22,41 @@ def pivot_by_electricity_users(input_file):
     df = pd.read_excel(input_file)
     print(f"      Input: {len(df)} licenses, {len(df.columns)} columns")
 
-    # Identify base columns (not electricity users)
+    # Identify base columns (not electricity users, excluding machinery)
     print(f"\n[2/5] Identifying columns...")
     user_pattern = re.compile(r'^ผู้ใช้ไฟฟ้า_(\d+)_(.+)$')
 
+    # Patterns for columns to exclude (machinery-related)
+    exclude_patterns = [
+        re.compile(r'^แผนการผลิต_'),
+        re.compile(r'^กระบวนการผลิต_'),
+        re.compile(r'^เครื่องจักร_'),
+        re.compile(r'^ต้นทุน_'),
+    ]
+
     base_columns = []
     user_columns = {}  # {user_number: [column_names]}
+    excluded_count = 0
 
     for col in df.columns:
         match = user_pattern.match(col)
         if match:
+            # This is an electricity user column
             user_num = int(match.group(1))
             field_name = match.group(2)
             if user_num not in user_columns:
                 user_columns[user_num] = []
             user_columns[user_num].append(col)
         else:
-            base_columns.append(col)
+            # Check if this column should be excluded
+            should_exclude = any(pattern.match(col) for pattern in exclude_patterns)
+            if should_exclude:
+                excluded_count += 1
+            else:
+                base_columns.append(col)
 
     print(f"      Base columns: {len(base_columns)}")
+    print(f"      Excluded machinery columns: {excluded_count}")
     print(f"      Max electricity users per license: {len(user_columns)}")
 
     # Create pivoted records
