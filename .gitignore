@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Data files (exclude large Excel/CSV files)
+*.xlsx
+*.csv
+*.xls
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# ChromeDriver
+chromedriver.exe
+chromedriver
+
+# Archive folder (contains old/backup files)
+archive/
+
+# Output files folder
+output_files/
+
+# Claude Code local folder
+.claude/
+
+# Allow important documentation
+!README*.md
+!COMPLETION_REPORT.md
